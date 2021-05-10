@@ -117,10 +117,7 @@ func dataSourceAlicloudEdasDeployGroupsRead(d *schema.ResourceData, meta interfa
 	if ok && nameRegex.(string) != "" {
 		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err = regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, group := range response.DeployGroupList.DeployGroup {
 			if r != nil && !r.MatchString(group.GroupName) {

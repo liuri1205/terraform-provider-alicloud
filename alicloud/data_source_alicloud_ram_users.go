@@ -125,10 +125,7 @@ func dataSourceAlicloudRamUsersRead(d *schema.ResourceData, meta interface{}) er
 		response, _ := raw.(*ram.ListUsersResponse)
 		for _, v := range response.Users.User {
 			if nameRegexOk {
-				r, err := regexp.Compile(nameRegex.(string))
-				if err != nil {
-					return WrapError(err)
-				}
+				r := regexp.MustCompile(nameRegex.(string))
 				if !r.MatchString(v.UserName) {
 					continue
 				}

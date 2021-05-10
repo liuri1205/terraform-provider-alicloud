@@ -158,10 +158,7 @@ func dataSourceAlicloudEssScheduledTasksRead(d *schema.ResourceData, meta interf
 	if okNameRegex || okIds {
 		for _, task := range allScheduledTasks {
 			if okNameRegex && nameRegex != "" {
-				r, err := regexp.Compile(nameRegex.(string))
-				if err != nil {
-					return WrapError(err)
-				}
+				var r = regexp.MustCompile(nameRegex.(string))
 				if r != nil && !r.MatchString(task.ScheduledTaskName) {
 					continue
 				}

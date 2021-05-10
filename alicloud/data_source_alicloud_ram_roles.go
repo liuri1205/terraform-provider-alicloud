@@ -129,10 +129,7 @@ func dataSourceAlicloudRamRolesRead(d *schema.ResourceData, meta interface{}) er
 	response, _ := raw.(*ram.ListRolesResponse)
 	for _, v := range response.Roles.Role {
 		if nameRegexOk {
-			r, err := regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r := regexp.MustCompile(nameRegex.(string))
 			if !r.MatchString(v.RoleName) {
 				continue
 			}

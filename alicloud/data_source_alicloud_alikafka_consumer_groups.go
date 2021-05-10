@@ -62,10 +62,7 @@ func dataSourceAlicloudAlikafkaConsumerGroupsRead(d *schema.ResourceData, meta i
 	if ok && nameRegex.(string) != "" {
 		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err = regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, consumer := range response.ConsumerList.ConsumerVO {
 			if r != nil && !r.MatchString(consumer.ConsumerId) {

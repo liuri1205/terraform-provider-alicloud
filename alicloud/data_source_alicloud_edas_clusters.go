@@ -144,10 +144,7 @@ func dataSourceAlicloudEdasClustersRead(d *schema.ResourceData, meta interface{}
 	if (ok && nameRegex.(string) != "") || (len(idsMap) > 0) {
 		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err = regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, cluster := range response.ClusterList.Cluster {
 			if r != nil && !r.MatchString(cluster.ClusterName) {

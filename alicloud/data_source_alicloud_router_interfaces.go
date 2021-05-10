@@ -227,13 +227,9 @@ func dataSourceAlicloudRouterInterfacesRead(d *schema.ResourceData, meta interfa
 	}
 
 	var filteredRouterInterfaces []vpc.RouterInterfaceType
-	var rounterInterfaceNameRegex *regexp.Regexp
+	var r *regexp.Regexp
 	if nameRegex, ok := d.GetOk("name_regex"); ok && nameRegex.(string) != "" {
-		r, err := regexp.Compile(nameRegex.(string))
-		if err != nil {
-			return WrapError(err)
-		}
-		rounterInterfaceNameRegex = r
+		r = regexp.MustCompile(nameRegex.(string))
 	}
 
 	for _, v := range allRouterInterfaces {
@@ -242,7 +238,7 @@ func dataSourceAlicloudRouterInterfacesRead(d *schema.ResourceData, meta interfa
 				continue
 			}
 		}
-		if rounterInterfaceNameRegex != nil && !rounterInterfaceNameRegex.MatchString(v.Name) {
+		if r != nil && !r.MatchString(v.Name) {
 			continue
 		}
 		if role := d.Get("role").(string); role != "" && role != v.Role {

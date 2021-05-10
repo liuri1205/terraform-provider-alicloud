@@ -286,16 +286,12 @@ func dataSourceAlicloudOssBucketsRead(d *schema.ResourceData, meta interface{}) 
 	var filteredBucketsTemp []oss.BucketProperties
 	nameRegex, ok := d.GetOk("name_regex")
 	if ok && nameRegex.(string) != "" {
-		var ossBucketNameRegex *regexp.Regexp
+		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err := regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
-			ossBucketNameRegex = r
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, bucket := range allBuckets {
-			if ossBucketNameRegex != nil && !ossBucketNameRegex.MatchString(bucket.Name) {
+			if r != nil && !r.MatchString(bucket.Name) {
 				continue
 			}
 			filteredBucketsTemp = append(filteredBucketsTemp, bucket)

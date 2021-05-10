@@ -113,10 +113,7 @@ func dataSourceAlicloudEdasApplicationsRead(d *schema.ResourceData, meta interfa
 	if (ok && nameRegex.(string) != "") || (len(idsMap) > 0) {
 		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err = regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, app := range response.ApplicationList.Application {
 			if r != nil && !r.MatchString(app.Name) {

@@ -320,10 +320,7 @@ func dataSourceAlicloudCSKubernetesClustersRead(d *schema.ResourceData, meta int
 			continue
 		}
 		if nameRegex, ok := d.GetOk("name_regex"); ok {
-			r, err := regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r := regexp.MustCompile(nameRegex.(string))
 			if !r.MatchString(v.Name) {
 				continue
 			}

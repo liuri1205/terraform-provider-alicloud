@@ -116,10 +116,7 @@ func dataSourceAlicloudAlikafkaTopicsRead(d *schema.ResourceData, meta interface
 	if ok && nameRegex.(string) != "" {
 		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err = regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, topic := range response.TopicList.TopicVO {
 			if r != nil && !r.MatchString(topic.Topic) {

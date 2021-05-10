@@ -102,10 +102,7 @@ func dataSourceAlicloudRamGroupsRead(d *schema.ResourceData, meta interface{}) e
 		response, _ := raw.(*ram.ListGroupsResponse)
 		for _, v := range response.Groups.Group {
 			if nameRegexOk {
-				r, err := regexp.Compile(nameRegex.(string))
-				if err != nil {
-					return WrapError(err)
-				}
+				r := regexp.MustCompile(nameRegex.(string))
 				if !r.MatchString(v.GroupName) {
 					continue
 				}

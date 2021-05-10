@@ -180,10 +180,7 @@ func dataSourceAlicloudEssScalingGroupsRead(d *schema.ResourceData, meta interfa
 	if okNameRegex || okIds {
 		for _, group := range allScalingGroups {
 			if okNameRegex && nameRegex != "" {
-				r, err := regexp.Compile(nameRegex.(string))
-				if err != nil {
-					return WrapError(err)
-				}
+				var r = regexp.MustCompile(nameRegex.(string))
 				if r != nil && !r.MatchString(group.ScalingGroupName) {
 					continue
 				}

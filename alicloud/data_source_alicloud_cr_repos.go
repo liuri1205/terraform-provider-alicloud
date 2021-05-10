@@ -188,10 +188,7 @@ func dataSourceAlicloudCRReposRead(d *schema.ResourceData, meta interface{}) err
 		}
 
 		if nameRegex, ok := d.GetOk("name_regex"); ok {
-			r, err := regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
+			r := regexp.MustCompile(nameRegex.(string))
 			if !r.MatchString(repo.RepoName) {
 				continue
 			}

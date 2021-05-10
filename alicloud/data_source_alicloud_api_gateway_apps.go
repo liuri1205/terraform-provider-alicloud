@@ -110,13 +110,9 @@ func dataSourceAlicloudApigatewayAppsRead(d *schema.ResourceData, meta interface
 
 	var filteredAppsTemp []cloudapi.AppAttribute
 	nameRegex, ok := d.GetOk("name_regex")
-	var gatewayAppNameRegex *regexp.Regexp
+	var r *regexp.Regexp
 	if ok && nameRegex.(string) != "" {
-		r, err := regexp.Compile(nameRegex.(string))
-		if err != nil {
-			return WrapError(err)
-		}
-		gatewayAppNameRegex = r
+		r = regexp.MustCompile(nameRegex.(string))
 	}
 
 	// ids
@@ -131,7 +127,7 @@ func dataSourceAlicloudApigatewayAppsRead(d *schema.ResourceData, meta interface
 	}
 
 	for _, app := range apps {
-		if gatewayAppNameRegex != nil && !gatewayAppNameRegex.MatchString(app.AppName) {
+		if r != nil && !r.MatchString(app.AppName) {
 			continue
 		}
 		if len(idsMap) > 0 {

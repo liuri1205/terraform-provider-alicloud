@@ -226,16 +226,12 @@ func dataSourceAlicloudSlbsRead(d *schema.ResourceData, meta interface{}) error 
 
 	nameRegex, ok := d.GetOk("name_regex")
 	if (ok && nameRegex.(string) != "") || (len(idsMap) > 0) {
-		var slbNameRegex *regexp.Regexp
+		var r *regexp.Regexp
 		if nameRegex != "" {
-			r, err := regexp.Compile(nameRegex.(string))
-			if err != nil {
-				return WrapError(err)
-			}
-			slbNameRegex = r
+			r = regexp.MustCompile(nameRegex.(string))
 		}
 		for _, balancer := range allLoadBalancers {
-			if slbNameRegex != nil && !slbNameRegex.MatchString(balancer.LoadBalancerName) {
+			if r != nil && !r.MatchString(balancer.LoadBalancerName) {
 				continue
 			}
 			if len(idsMap) > 0 {

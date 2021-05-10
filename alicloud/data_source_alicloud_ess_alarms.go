@@ -174,10 +174,7 @@ func dataSourceAlicloudEssAlarmsRead(d *schema.ResourceData, meta interface{}) e
 	if okNameRegex || okIds {
 		for _, alarm := range allAlarms {
 			if okNameRegex && nameRegex != "" {
-				r, err := regexp.Compile(nameRegex.(string))
-				if err != nil {
-					return WrapError(err)
-				}
+				var r = regexp.MustCompile(nameRegex.(string))
 				if r != nil && !r.MatchString(alarm.Name) {
 					continue
 				}
